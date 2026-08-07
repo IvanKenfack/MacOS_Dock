@@ -1,0 +1,28 @@
+.dock-wrapper {
+    position : absolute;
+    left : 0;
+    right : 0;
+    bottom : 0;
+    display : flex;
+    justify-content: center;
+    font-family: Helvetica, sans-serif;
+}
+
+body {
+    background-color: #1d1d1f;
+}
+.dock {
+    display : flex;
+}
+
+.dock-icon{
+    width: 64px;
+    height: 64px;
+    outline: solid 1px #f1f1f7;
+    color: #f1f1f7;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+
+}
