@@ -16,15 +16,24 @@ body {
 }
 
 .dock-icon{
-    width: 64px;
-    height: 64px;
-    outline: solid 1px #f1f1f7;
+    width: 56px;
+    height: 56px;
     color: #f1f1f7;
+    margin: 25px;
+    padding: 20px;
     display: flex;
     align-items: center;
     justify-content: center;
     transform-origin: center bottom;
+    background: transparent;
+    border: none;
 
+}
+
+.dock-icon img {
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
 }
 
 .dock.animated .dock-icon {

@@ -63,14 +63,14 @@ class Dock{
 
     }
 
-    handleMouseLeave(e){
+    handleMouseLeave(){
         this.icons.forEach(icon => {
             icon.style.removeProperty("transform");
             icon.style.removeProperty("transform-origin");
         })
     }
 
-    handleMouseEnter(e){
+    handleMouseEnter(){
         this.root.classList.add('animated')
         window.setTimeout(() => {
             this.root.classList.remove('animated')
