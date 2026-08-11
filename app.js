@@ -13,10 +13,14 @@ function between(val, min, max) {
  * @param {number}value
  */
 function scaling (value){
-Math.max(Math.min(-0.2 * Math.pow(d, 2) + 1.05, 1), 0)
+return Math.max(Math.min(-0.2 * Math.pow(value, 2) + 1.05, 1), 0)
 }
 
-
+const TransformOrigins = {
+    '-1' : 'right',
+    '0' : 'center',
+    '1' : 'left',
+}
 
 /**
  * @property {HTMLElement} root
@@ -28,6 +32,8 @@ class Dock{
     /**
      * @param {HTMLElement} element
      */
+
+    scale = 1
     constructor(element){
 
         this.root = element;
@@ -37,6 +43,8 @@ class Dock{
         }
         this.iconSize = this.icons[0].offsetWidth;
         element.addEventListener('mousemove', this.handleMouseMove.bind(this))
+        element.addEventListener('mouseleave', this.handleMouseLeave.bind(this))
+        element.addEventListener('mouseenter', this.handleMouseEnter.bind(this))
     }
 
     /**
@@ -55,15 +63,58 @@ class Dock{
 
     }
 
+    handleMouseLeave(e){
+        this.icons.forEach(icon => {
+            icon.style.removeProperty("transform");
+            icon.style.removeProperty("transform-origin");
+        })
+    }
+
+    handleMouseEnter(e){
+        this.root.classList.add('animated')
+        window.setTimeout(() => {
+            this.root.classList.remove('animated')
+        }, 100)
+
+    }
     /**
      * applique la transformation sur les icones
      */
     scaleIcons(){
-        this.icons.forEach((icon,k) => {
-            const center = k + 0.5
-            const distanceFromPointer =
-        })
+        const selectedIndex = Math.floor(this.mousePosition)
+        const centerOffset = this.mousePosition - selectedIndex - 0.5
+        let baseOffset = this.scaleFromDirection(
+            selectedIndex,
+            0,
+            -centerOffset * this.iconSize
+        )
+        let offset = baseOffset *  (0.5 - centerOffset)
+        for (let i = selectedIndex + 1; i < this.icons.length; i++){
+            offset += this.scaleFromDirection(i,1,offset)
+        }
+        offset = baseOffset * (0.5 + centerOffset)
+        for (let i = selectedIndex - 1; i >= 0; i--){
+            offset += this.scaleFromDirection(i,-1,-offset)
+        }
+    }
 
+    /**
+     *
+     * @param {number} index Index de l'icône à agrandir
+     * @param {number} direction Position de l'icône (0: centre, -1: gauche, 1: droite)
+     * @param {number} offset
+     */
+    scaleFromDirection(index, direction, offset){
+        const center = index + 0.5
+        const distanceFromPointer = this.mousePosition - center
+        const scale = scaling(distanceFromPointer) * this.scale
+        const icon = this.icons[index]
+        icon.style.setProperty(
+            'transform',
+            `translateX(${offset}px) scale(${scale + 1})`
+        )
+        icon.style.setProperty("transform-origin", `${TransformOrigins[direction.toString()]} bottom`)
+        return scale * this.iconSize
     }
 }
 
